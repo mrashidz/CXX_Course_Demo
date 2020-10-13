@@ -8,7 +8,7 @@ int main() {
     advanceStuff();
 
 
-    //badWayOfDoingThings(4, 8);
+    badWayOfDoingThings(4, 8);
 
     return 0;
 }

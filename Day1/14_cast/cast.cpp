@@ -23,6 +23,7 @@ int main() {
     std::cout << "ui: " << ui << " uc: " << uc << " uc value: " << static_cast<int> (uc)<< std::endl;
     std::cout << "ff: " << f << " ii: " << ii << std::endl;    
     std::cout << "fff: " << fff << " ffff: " << ffff << std::endl;
+    
 
     return 0;
 }

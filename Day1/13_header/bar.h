@@ -9,11 +9,13 @@ inline void advanceStuff() {
     std::cout << "Inline functions would be inserted wherever used!" << std::endl;
 }
 
-/*
+
 void badWayOfDoingThings(int a, int b) {
-    if (a > b) std::cout << a << " is not bigget than " << b << std::endl;
-    else std::cout << a << " is not bigget than " << b << std::endl;
+    if (a > b) std::cout << a << " is bigger than " << b << std::endl;
+    else std::cout << a << " is not bigger than " << b << std::endl;
 }
-*/
+
 #endif // BAR_H
+
+
 
