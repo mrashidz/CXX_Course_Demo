@@ -12,9 +12,7 @@ typedef struct _a{
     struct {
         int a;
         int b;
-    };
-    
-    
+    };    
 }stuA;
 
 typedef struct _b{
@@ -78,8 +76,6 @@ void PrintB(stuB *b) {
     //std::cout << b->c.c << std::endl;
     std::cout << b->cc.c << std::endl;
     PrintA( &(b->a) );    
-
-
     std::cout << "---BBBB---" << std::endl << std::endl;
 
 }
