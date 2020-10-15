@@ -23,7 +23,3 @@ public:
 
 
 
-
-int main() {
-
-}
