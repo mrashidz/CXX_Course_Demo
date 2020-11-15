@@ -19,11 +19,13 @@ add_executable(avic main.cpp ${appavic_src} ${RESOURCES} ${MOC_FILES} )
 #qt5_add_resources(RCC_SOURCES qml/cluster-gauges.qrc)
 #target_link_libraries(avic PUBLIC Qt5::Core Qt5::QuickControls2)
 include_directories(include
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/libcanio/include/
                     include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
                     ${QTAPPFW_INCLUDE_DIRS})
 target_link_libraries(avic
-Qt5::Core
-Qt5::QuickControls2
-Qt5::QuickWidgets
-${QTAPPFW_LIBRARIES}
+    canio
+    Qt5::Core
+    Qt5::QuickControls2
+    Qt5::QuickWidgets
+    ${QTAPPFW_LIBRARIES}
 )

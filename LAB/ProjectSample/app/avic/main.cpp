@@ -4,8 +4,8 @@
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlContext>
 #include <QtQml/qqml.h>
-#include <QUrlQuery>
-#include <QProcess>
+#include <QtCore/QUrlQuery>
+#include <QtCore/QProcess>
 //#include <QCanBus>
 #include <iostream>
 #include "include/your_stuff.h"
@@ -35,7 +35,6 @@ int main(int argc, char *argv[])
     QList<QObject *> mobjs = engine.rootObjects();
     QObject *vs = mobjs.first()->findChild<QObject*>("valueSource");
     std::cout << parser.value("can-interface").toStdString() << std::endl;
-     vs->setProperty("seat_belt",true);
     /***** Your Code Goes Below Here ******/
     yourStuff _(parser.value("can-interface").toStdString(),vs);
 //    QObject::connect(&_,&yourStuff::die,&app,&QCoreApplication::quit,Qt::QueuedConnection);

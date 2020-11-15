@@ -31,7 +31,7 @@ static const uint16_t ICN9 = 0b0000000000100000;
 
 
 typedef union _icons{
-    struct _bits{
+    struct __attribute__((packed)) _bits{
     unsigned char HZRD:1;
     unsigned char ICN0:1;
     unsigned char ICN1:1;
@@ -50,7 +50,7 @@ typedef union _icons{
 }Iconss_t;
 
 typedef union _gearbox{
-    struct _bits {
+    struct  _bits {
     unsigned char GEAR_P:3;
     unsigned char GEAR_N:3;
     unsigned char RESERVERD_PADDING:2;
@@ -74,14 +74,17 @@ typedef struct _engine {
     unsigned short SPD;
 }Engine_t;
 
-typedef struct _gauge{
+typedef union _gauge{
+    struct __attribute__((packed)) _inner{
     unsigned char G_FUEL;
     unsigned char G_OILT;
     unsigned char G_TEMP;
+    }Inner;
+    uint8_t Data[3];
 }Gauges_t;
 
-void printGauges(const Gauges_t &_g);
-void printIconss(const Iconss_t::_bits &_i);
+void printGauges(const Gauges_t::_inner *_g);
+void printIconss(const Iconss_t::_bits *_i);
 void printGearbx(const Gearbx_t &_g);
 void printEngine(const Engine_t &_e);
 void printUserIn(const UserIn_t &_u);

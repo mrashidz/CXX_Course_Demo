@@ -94,7 +94,9 @@ Item {
     property bool high_beam: false
     property bool hand_break: false
     property bool right_blinker: false
-    property bool startUp: true
+    property bool startUp: false
+    property string txt: "Nothing"
+
 
     function randomDirection() {
         return Math.random() > 0.5 ? Qt.LeftArrow : Qt.RightArrow;

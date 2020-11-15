@@ -4,6 +4,7 @@
 template <typename KeyboardReader> 
 class UserInputReader {
 public:
+    using KeyBehaviour_t = typename KeyboardReader::KeyBehaviour_t;
     UserInputReader() = default;
     inline typename KeyboardReader::KeyBehaviour_t readKeyBehaviour() {
         return _p_keyBoardReader.readKeyBehaviour();

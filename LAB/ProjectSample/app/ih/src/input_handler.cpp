@@ -3,8 +3,12 @@
 #include "userio/keyboard_reader/x11/x11keybindings.h"
 #include "input_handler.h"
 
+
+
 bool InputHandler::init(const std::string &_canIFname) {
     std::memset(this->ICONs.Data,0x00,sizeof (CAN::MSG::Iconss_t::_bits));
+    std::memset(this->GAUGs.Data,0x00,sizeof (CAN::MSG::Gauges_t::_inner));
+
     return this->CANBUS_Writer.open(_canIFname);
 }
 
@@ -15,9 +19,20 @@ bool InputHandler::run() {
         this->printState();
         this->StateIsChanged = false;
     }
+
+    if(this->PushedKeys.size() && ++GaugeSensetivity > GAUGE_CHECK_SENSETIVITY)
+        for(auto &_e: this->PushedKeys)
+            this->keyIsPushed(_e);
+
     ret = ret&&this->CANBUS_Writer.write(CAN::MSG::ICONSS_ID,
                                   sizeof (CAN::MSG::Iconss_t),
                                   this->ICONs.Data);
+    ret = ret&&this->CANBUS_Writer.write(CAN::MSG::GAUGES_ID,
+                                  sizeof (CAN::MSG::GAUGES_ID),
+                                  this->GAUGs.Data);
+
+    std::cout /*<< "Key " << <<" " */<< (int)(this->GaugeSensetivity)<< " is not defined!" << std::endl;
+
     return ret;
 }
 
@@ -34,8 +49,8 @@ bool InputHandler::encodKey(const KeyboardReader::KeyBehaviour_t &_k) {
 bool InputHandler::keyIsPressed(const unsigned int &_k) {
     bool ret = true;
     this->StateIsChanged = true;
-    /*switch (_k) {
-    case X11::ICN0:
+    switch (_k) {
+    /*case X11::ICN0:
             checkHazard();
         break;
     case X11::ICN1:
@@ -53,10 +68,29 @@ bool InputHandler::keyIsPressed(const unsigned int &_k) {
     case X11::EXIT:
             ret = false;
         break;
-    default:
-        break;
     }*/
-    std::cout << "Pressed Key is: " << X11::KeyToString(_k) << std::endl;
+    case X11::OLDN:
+        this->PushedKeys.insert(X11::OLDN);
+        break;
+    case X11::OLUP:
+        this->PushedKeys.insert(X11::OLUP);
+        break;
+    case X11::TMDN:
+        this->PushedKeys.insert(X11::TMUP);
+        break;
+    case X11::TMUP:
+        this->PushedKeys.insert(X11::TMUP);
+        break;
+    case X11::FLDN:
+        this->PushedKeys.insert(X11::FLDN);
+        break;
+    case X11::FLUP:
+        this->PushedKeys.insert(X11::FLUP);
+        break;
+    default:
+        std::cout << "Pressed Key is: " << X11::KeyToString(_k) << std::endl;
+        break;
+    }
     return ret;
 }
 
@@ -94,6 +128,24 @@ bool InputHandler::keyIsReleased(const unsigned int &_k) {
     case X11::ICN9:
             this->ICONs.Bits.ICN9=!this->ICONs.Bits.ICN9;
         break;
+    case X11::OLDN:
+        this->PushedKeys.erase(X11::OLDN);
+        break;
+    case X11::OLUP:
+        this->PushedKeys.erase(X11::OLUP);
+        break;
+    case X11::TMDN:
+        this->PushedKeys.erase(X11::TMUP);
+        break;
+    case X11::TMUP:
+        this->PushedKeys.erase(X11::TMUP);
+        break;
+    case X11::FLDN:
+        this->PushedKeys.erase(X11::FLDN);
+        break;
+    case X11::FLUP:
+        this->PushedKeys.erase(X11::FLUP);
+        break;
     /* Engine ACCL & BREK
     case X11::ACCL:
             this->State->InputState.ENGINE.ACCL_P=0;
@@ -111,13 +163,40 @@ bool InputHandler::keyIsReleased(const unsigned int &_k) {
     return true;
 }
 
+void InputHandler::keyIsPushed(const unsigned int &_k) {
+    switch (_k) {
+    case X11::OLDN:
+        this->decreaseGauge(this->GAUGs.Inner.G_OILT);
+        break;
+    case X11::OLUP:
+        this->increaseGauge(this->GAUGs.Inner.G_OILT);
+        break;
+    case X11::TMDN:
+        this->decreaseGauge(this->GAUGs.Inner.G_TEMP);
+        break;
+    case X11::TMUP:
+        this->increaseGauge(this->GAUGs.Inner.G_TEMP);
+        break;
+    case X11::FLDN:
+        this->decreaseGauge(this->GAUGs.Inner.G_FUEL);
+        break;
+    case X11::FLUP:
+        this->increaseGauge(this->GAUGs.Inner.G_FUEL);
+        break;
+    default:
+        std::cout << "Released Key is: " << X11::KeyToString(_k) << std::endl;
+        break;
+    }
+    this->GaugeSensetivity = 0;
+}
+
 void InputHandler::printState() {
     std::cout << ">>>>> Input Handler's State <<<<<" << std::endl;
     std::cout << "+++++ GAUGES:" << std::endl;
-    CAN::MSG::printGauges(this->GAUGs);
+    CAN::MSG::printGauges(&(this->GAUGs.Inner));
     std::cout << "+++++ USERIN:" << std::endl;
     CAN::MSG::printUserIn(this->USRIn);
     std::cout << "+++++ ICONSS:" << std::endl;
-    CAN::MSG::printIconss(this->ICONs.Bits);
+    CAN::MSG::printIconss(&(this->ICONs.Bits));
     std::cout << std::endl;
 }

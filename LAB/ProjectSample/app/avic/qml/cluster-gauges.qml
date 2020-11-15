@@ -23,7 +23,7 @@ ApplicationWindow {
     ValueSource {
         id: valueSource
         objectName: "valueSource"
-    }
+    }/*
     property string _API_str: "low-can"
     property string verb_str: "subscribe"
     property var _MSGID_enu: { "call":2, "retok":3, "reterr":4, "event":5 }
@@ -31,7 +31,7 @@ ApplicationWindow {
     property string status_str: ""
     property int counter: 0
     property string event_str: ""
-
+*/
 
     Rectangle {
         id: statusFrame
@@ -401,7 +401,7 @@ ApplicationWindow {
         width: 441
         height: 190
 
-        source: "images/logod.png"
+        source: valueSource.startUp ? "images/logod.png" : "images/a.png"
         //x: 772
     }
 
