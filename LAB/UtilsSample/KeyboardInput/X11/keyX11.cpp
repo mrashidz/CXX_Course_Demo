@@ -20,7 +20,7 @@ int main()
     s = DefaultScreen(display);
  
     /* create window */
-    window = XCreateSimpleWindow(display, RootWindow(display, s), 1, 1, 2, 2, 1,
+    window = XCreateSimpleWindow(display, RootWindow(display, s), 1, 1, 1, 1, 0,
                            BlackPixel(display, s), WhitePixel(display, s));
  
     /* select kind of events we are interested in */
@@ -28,7 +28,8 @@ int main()
  
     /* map (show) the window */
     XMapWindow(display, window);
- 
+    XAutoRepeatOff(display);
+
     /* event loop */
     while (1)
     {
@@ -48,6 +49,8 @@ int main()
             printf( "KeyRelease: %x\n", event.xkey.keycode );
         }
     }
+    XAutoRepeatOff(display);
+
 
     /* close connection to server */
     XCloseDisplay(display);
