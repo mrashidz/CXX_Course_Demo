@@ -15,17 +15,17 @@ static const uint32_t USERIN_ID = 0x111;
 
 namespace MASK {
 
-static const uint16_t HZRD = 0b1000000000000000;
-static const uint16_t ICN0 = 0b0100000000000000;
-static const uint16_t ICN1 = 0b0010000000000000;
-static const uint16_t ICN2 = 0b0001000000000000;
-static const uint16_t ICN3 = 0b0000100000000000;
-static const uint16_t ICN4 = 0b0000010000000000;
-static const uint16_t ICN5 = 0b0000001000000000;
-static const uint16_t ICN6 = 0b0000000100000000;
-static const uint16_t ICN7 = 0b0000000010000000;
-static const uint16_t ICN8 = 0b0000000001000000;
-static const uint16_t ICN9 = 0b0000000000100000;
+static const uint16_t HZRD = 0b10000000000;
+static const uint16_t ICN0 = 0b01000000000;
+static const uint16_t ICN1 = 0b00100000000;
+static const uint16_t ICN2 = 0b00010000000;
+static const uint16_t ICN3 = 0b00001000000;
+static const uint16_t ICN4 = 0b00000100000;
+static const uint16_t ICN5 = 0b00000010000;
+static const uint16_t ICN6 = 0b00000001000;
+static const uint16_t ICN7 = 0b00000000100;
+static const uint16_t ICN8 = 0b00000000010;
+static const uint16_t ICN9 = 0b00000000001;
 }
 
 

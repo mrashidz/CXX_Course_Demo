@@ -9,13 +9,9 @@ public:
     yourStuff() = delete;
     yourStuff(const std::string &_ifName, QObject *_);
 
-
-
-
 private:
     bool run();
-    void YouHaveJustRecievedACANFrame(const canfd_frame * const _frame);
-    void readMyEngineFrame(const unsigned char * const _data);
+    void YouHaveJustRecievedACANFrame(const canfd_frame * const _frame);    
     void timerEvent(QTimerEvent*) override;
 
 //signals:

@@ -27,9 +27,9 @@ public:
 
 public:
     void setIcon(const _icons *_i);
-
     inline void setGear(const char &_s) {ValueSource->setProperty("gear",QVariant(_s));}
-    inline void setRPM(const double &_s) {ValueSource->setProperty("rpm",QVariant(_s));}
+    inline void setRPM(const double &_s) {ValueSource->setProperty("rpmHezar",QVariant(_s));}
+    inline void setTXT(const QString &_s) {ValueSource->setProperty("txt",QVariant(_s));}
     inline void setSpeed(const double &_s) {ValueSource->setProperty("kph",QVariant(_s));}
     inline void setGearPindle(const char &_p) {ValueSource->setProperty("pindle",QVariant(_p));}
     inline void setFuelGauges(const double &_f) {ValueSource->setProperty("fuel",QVariant(_f/0xFF));}

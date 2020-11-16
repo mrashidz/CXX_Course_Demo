@@ -7,6 +7,7 @@
 class KeyboardReader {
 public:
     using KeyBehaviour_t = std::pair<int,unsigned int>;
+    using Key_t = KeyBehaviour_t::second_type;
     KeyboardReader();
     KeyboardReader(const KeyboardReader&) = delete;
     KeyboardReader operator = (const KeyboardReader&) = delete;

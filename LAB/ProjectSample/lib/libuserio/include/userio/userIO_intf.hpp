@@ -5,7 +5,11 @@ template <typename KeyboardReader>
 class UserInputReader {
 public:
     using KeyBehaviour_t = typename KeyboardReader::KeyBehaviour_t;
+    using Key_t = typename KeyboardReader::Key_t;
+
     UserInputReader() = default;
+    UserInputReader(const UserInputReader &) = delete;
+    UserInputReader operator = (const UserInputReader&) = delete;
     inline typename KeyboardReader::KeyBehaviour_t readKeyBehaviour() {
         return _p_keyBoardReader.readKeyBehaviour();
     }

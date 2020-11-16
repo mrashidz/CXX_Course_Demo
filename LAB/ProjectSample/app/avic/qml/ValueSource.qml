@@ -64,9 +64,9 @@ Item {
     property real oil_temp: 0
     Behavior on kph { NumberAnimation { duration: 500 } }
     Behavior on rpm { NumberAnimation { duration: 200 } }
-    Behavior on temperature { NumberAnimation { duration: 500 } }
-    Behavior on fuel { NumberAnimation { duration: 500 } }
-    Behavior on oil_temp { NumberAnimation { duration: 500 } }
+    Behavior on temperature { NumberAnimation { duration: 50 } }
+    Behavior on fuel { NumberAnimation { duration: 50 } }
+    Behavior on oil_temp { NumberAnimation { duration: 50 } }
     property string gear: "0"
     property int pindle_int: 0
     property string prindle:  {
@@ -94,8 +94,8 @@ Item {
     property bool high_beam: false
     property bool hand_break: false
     property bool right_blinker: false
-    property bool startUp: false
-    property string txt: "Nothing"
+    property bool startUp: true
+    property string txt: ""
 
 
     function randomDirection() {

@@ -4,24 +4,19 @@
 #include "your_stuff.h"
 #include "canio/can_common.h"
 
-namespace CANID {
-const canid_t ENGINE_AND_GEARBOX = 0x123;
-const canid_t ICONZ = 0x213;
-}
+
 
 void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
     switch (_frame->can_id) {
     case CAN::MSG::GAUGES_ID: {
-        const struct CAN::MSG::Gauges_t::_inner* s = reinterpret_cast<const struct CAN::MSG::Gauges_t::_inner* >((_frame->data));
-
+        const struct CAN::MSG::Gauges_t::_inner* s =
+                reinterpret_cast<const struct CAN::MSG::Gauges_t::_inner* >((_frame->data));
         this->InstrumentCluster.setFuelGauges(s->G_FUEL);
         this->InstrumentCluster.setTemperatureGauges(s->G_TEMP);
         this->InstrumentCluster.setOilTemperatureGauges(s->G_OILT);
-        CAN::MSG::printGauges(s);
-    }
         break;
+    }
     case CAN::MSG::ICONSS_ID:
-
         this->InstrumentCluster.setIcon(reinterpret_cast<const struct _icons * >((_frame->data)));
         break;
     default:
@@ -30,9 +25,6 @@ void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
 
 }
 
-void yourStuff::readMyEngineFrame(const unsigned char * const _data) {
-    this->InstrumentCluster.setSpeed(static_cast<double>(_data[0]));
-}
 
 
 

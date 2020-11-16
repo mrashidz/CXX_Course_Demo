@@ -15,6 +15,3 @@ void ClusterUpdater::setIcon(const  _icons * icons) {
     ValueSource->setProperty("right_blinker",  QVariant( static_cast<unsigned>(icons->right_blinker)));
 }
 
-void CANOpener() {
-
-}

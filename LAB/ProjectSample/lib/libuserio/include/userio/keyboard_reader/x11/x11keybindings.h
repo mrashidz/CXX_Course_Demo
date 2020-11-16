@@ -31,7 +31,7 @@ namespace X11 {
 
     const unsigned int NADA = 0;
     std::string KeyToString(const unsigned int &_k);
-    static const std::unordered_set<unsigned int> DEFINED_KEYS = {0,9,10,11,12,13,14,15,16,17,18,19,38,
+    static const std::unordered_set<unsigned int> DEFINED_KEYS = {9,10,11,12,13,14,15,16,17,18,19,38,
                                                                   52,59,60,111,116,104,33,34,35,47,48,51};
 } // namespace X11
 #endif // X11KEYBINDINGS_H
