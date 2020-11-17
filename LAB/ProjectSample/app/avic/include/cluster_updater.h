@@ -25,6 +25,7 @@ public:
     inline void init(QObject*_){this->ValueSource=_;}
 
 
+    QObject *ValueSource;
 public:
     void setIcon(const _icons *_i);
     inline void setGear(const char &_s) {ValueSource->setProperty("gear",QVariant(_s));}
@@ -34,11 +35,12 @@ public:
     inline void setGearPindle(const char &_p) {ValueSource->setProperty("pindle",QVariant(_p));}
     inline void setFuelGauges(const double &_f) {ValueSource->setProperty("fuel",QVariant(_f/0xFF));}
     inline void setTemperatureGauges(const double &_t) {ValueSource->setProperty("temperature",QVariant(_t/0xFF));}
-    inline void setOilTemperatureGauges(const double&_t) {ValueSource->setProperty("oil_temp",QVariant(_t/0xFF));}
+    inline void setOilTemperatureGauges(const double &_t) {ValueSource->setProperty("oil_temp",QVariant(_t/0xFF));}
+    inline void startUp(const int &_t) {ValueSource->setProperty("startUp",QVariant(_t));}
+
 
 private:
     unsigned short iconZ;
-    QObject *ValueSource;
 };
 
 #endif // CLUSTERUPDATE_H

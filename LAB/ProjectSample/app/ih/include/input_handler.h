@@ -17,8 +17,8 @@ public:
 private:
     using X11keys = x11KeyboardReader::KeyBehaviour_t::second_type;
     bool encodKey(const KeyboardReader::KeyBehaviour_t &_k);
-    bool keyIsPressed(const unsigned int &_k);
-    bool keyIsReleased(const unsigned int &_k);
+    bool keyIsPressed(const KeyboardReader::Key_t &_k);
+    bool keyIsReleased(const KeyboardReader::Key_t &_k);
     inline void decreaseGauge(unsigned char &_v) {(_v < GAUGE_STEP) ? _v=0X00:_v-=GAUGE_STEP;}
     inline void increaseGauge(unsigned char &_v) {(_v + GAUGE_STEP > 0xFF) ? _v=0XFF:_v+=GAUGE_STEP;}    
     void keyIsPushed(const unsigned int &_k);

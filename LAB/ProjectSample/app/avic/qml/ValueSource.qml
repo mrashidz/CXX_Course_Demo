@@ -64,13 +64,38 @@ Item {
     property real oil_temp: 0
     Behavior on kph { NumberAnimation { duration: 500 } }
     Behavior on rpm { NumberAnimation { duration: 200 } }
-    Behavior on temperature { NumberAnimation { duration: 50 } }
-    Behavior on fuel { NumberAnimation { duration: 50 } }
-    Behavior on oil_temp { NumberAnimation { duration: 50 } }
-    property string gear: "0"
+    Behavior on temperature { NumberAnimation { duration: 1/*500*/ } }
+    Behavior on fuel { NumberAnimation { duration: 1/*500*/ } }
+    Behavior on oil_temp { NumberAnimation { duration: 1/*500*/ } }
+
+//    Behavior on kph {
+//        animation: du
+//    }
+
+
+
+//    property string txt: ""
+    property string gear: "0"/* {
+        var g;
+        if (kph < 30) {
+            return "1";
+        }
+        if (kph < 50) {
+            return "2";
+        }
+        if (kph < 80) {
+            return "3";
+        }
+        if (kph < 120) {
+            return "4";
+        }
+        if (kph < 160) {
+            return "5";
+        }
+    }*/
     property int pindle_int: 0
     property string prindle:  {
-        var g;//??
+        var g;
         if (pindle_int == 0) {
             return "P";
         } else if (pindle_int == 1) {
@@ -82,7 +107,9 @@ Item {
         } else if (pindle_int == 4) {
             return "M";
         }
+//        return "P";
     }
+
     property bool start: false
     property bool left_blinker: false
     property bool engine_check: false
@@ -95,10 +122,477 @@ Item {
     property bool hand_break: false
     property bool right_blinker: false
     property bool startUp: true
-    property string txt: ""
+    property string txt: "."
+
+    SequentialAnimation {
+        running: startUp
+        ParallelAnimation {
+            NumberAnimation {
+                target: valueSource
+                property: "kph"
+                easing.type: Easing.InOutSine
+                from: 0
+                to: 250
+                duration: 1000
+            }
+        }
+        PauseAnimation {
+            duration: 200
+        }
+        ParallelAnimation {
+            NumberAnimation {
+                target: valueSource
+                property: "oil_check"
+                from: 0
+                to: 19
+                duration: 200
+
+            }
+            NumberAnimation {
+                target: valueSource
+                property: "high_beam"
+                from: 0
+                to: 19
+                duration: 200
 
 
-    function randomDirection() {
-        return Math.random() > 0.5 ? Qt.LeftArrow : Qt.RightArrow;
+            }
+        }
+/*
+        ParallelAnimation {
+            NumberAnimation {
+                target: valueSource
+
+                        property: "abs"
+                        from: 0
+                        to: 1
+                        duration: 200
+                    }
+                    NumberAnimation {
+                        target: valueSource
+                        property: "doors_open"
+                        from: 0
+                        to: 1
+                        duration: 200
+                    }
+                }
+                ParallelAnimation {
+                    NumberAnimation {
+                        target: valueSource
+                        property: "battery"
+                        from: 0
+                        to: 1
+                        duration: 200
+                    }
+                    NumberAnimation {
+                        target: valueSource
+                        property: "seat_belt"
+                        from: 0
+                        to: 1
+                        duration: 1000
+                    }
+                }
+            }
+        }
+    */
+        PauseAnimation {
+            duration: 200
+        }
+        ParallelAnimation {
+
+            NumberAnimation {
+                target: valueSource
+                property: "kph"
+                easing.type: Easing.InOutSine
+                from: 250
+                to: 0
+                duration: 300
+            }
+
+
+
+            SequentialAnimation {
+
+
+                ParallelAnimation {
+                    NumberAnimation {
+                        target: valueSource
+                        property: "oil_check"
+                        from: 1
+                        to: 0
+                        duration:100
+                    }
+                    NumberAnimation {
+                        target: valueSource
+                        property: "high_beam"
+                        from: 1
+                        to: 0
+                        duration:100
+                    }
+                }
+                ParallelAnimation {
+                    NumberAnimation {
+                        target: valueSource
+                        property: "abs"
+                        from: 1
+                        to: 0
+                        duration:100
+                    }
+                    NumberAnimation {
+                        target: valueSource
+                        property: "doors_open"
+                        from: 1
+                        to: 0
+                        duration:100
+                    }
+                }
+                ParallelAnimation {
+                    NumberAnimation {
+                        target: valueSource
+                        property: "battery"
+                        from: 1
+                        to: 0
+                        duration:100
+                    }
+                    NumberAnimation {
+                        target: valueSource
+                        property: "seat_belt"
+                        from: 1
+                        to: 0
+                        duration:100
+                    }
+                }
+            }
+        }
     }
+
+
+
+/*
+    SequentialAnimation {
+        running: true
+        loops: 1
+
+        // We want a small pause at the beginning, but we only want it to happen once.
+        PauseAnimation {
+            duration: 1000
+        }
+
+        PropertyAction {
+            target: valueSource
+            property: "start"
+            value: false
+        }
+
+        SequentialAnimation {
+            loops: Animation.Infinite
+
+            // Simulate startup with indicators blink
+            PropertyAction {
+                target: valueSource
+                property: "startUp"
+                value: true
+            }
+            PauseAnimation {
+                duration: 1000
+            }
+            PropertyAction {
+                target: valueSource
+                property: "startUp"
+                value: false
+            }
+
+            ParallelAnimation {
+                NumberAnimation {
+                    target: valueSource
+                    property: "kph"
+                    easing.type: Easing.InOutSine
+                    from: 0
+                    to: 30
+                    duration: 3000
+                }
+                NumberAnimation {
+                    target: valueSource
+                    property: "rpm"
+                    easing.type: Easing.InOutSine
+                    from: 1
+                    to: 6.1
+                    duration: 3000
+                }
+            }
+            ParallelAnimation {
+                // We changed gears so we lost a bit of speed.
+                NumberAnimation {
+                    target: valueSource
+                    property: "kph"
+                    easing.type: Easing.InOutSine
+                    from: 30
+                    to: 26
+                    duration: 600
+                }
+                NumberAnimation {
+                    target: valueSource
+                    property: "rpm"
+                    easing.type: Easing.InOutSine
+                    from: 6
+                    to: 2.4
+                    duration: 600
+                }
+            }
+            ParallelAnimation {
+                NumberAnimation {
+                    target: valueSource
+                    property: "kph"
+                    easing.type: Easing.InOutSine
+                    to: 60
+                    duration: 3000
+                }
+                NumberAnimation {
+                    target: valueSource
+                    property: "rpm"
+                    easing.type: Easing.InOutSine
+                    to: 5.6
+                    duration: 3000
+                }
+            }
+            ParallelAnimation {
+                // We changed gears so we lost a bit of speed.
+                NumberAnimation {
+                    target: valueSource
+                    property: "kph"
+                    easing.type: Easing.InOutSine
+                    to: 56
+                    duration: 600
+                }
+                NumberAnimation {
+                    target: valueSource
+                    property: "rpm"
+                    easing.type: Easing.InOutSine
+                    to: 2.3
+                    duration: 600
+                }
+            }
+            ParallelAnimation {
+                NumberAnimation {
+                    target: valueSource
+                    property: "kph"
+                    easing.type: Easing.InOutSine
+                    to: 100
+                    duration: 3000
+                }
+                NumberAnimation {
+                    target: valueSource
+                    property: "rpm"
+                    easing.type: Easing.InOutSine
+                    to: 5.1
+                    duration: 3000
+                }
+            }
+            ParallelAnimation {
+                // We changed gears so we lost a bit of speed.
+                NumberAnimation {
+                    target: valueSource
+                    property: "kph"
+                    easing.type: Easing.InOutSine
+                    to: 96
+                    duration: 600
+                }
+                NumberAnimation {
+                    target: valueSource
+                    property: "rpm"
+                    easing.type: Easing.InOutSine
+                    to: 2.2
+                    duration: 600
+                }
+            }
+
+            ParallelAnimation {
+                NumberAnimation {
+                    target: valueSource
+                    property: "kph"
+                    easing.type: Easing.InOutSine
+                    to: 140
+                    duration: 3000
+                }
+                NumberAnimation {
+                    target: valueSource
+                    property: "rpm"
+                    easing.type: Easing.InOutSine
+                    to: 6.2
+                    duration: 3000
+                }
+            }
+
+            // Slow down a bit
+            ParallelAnimation {
+                NumberAnimation {
+                    target: valueSource
+                    property: "kph"
+                    easing.type: Easing.InOutSine
+                    to: 115
+                    duration: 6000
+                }
+                NumberAnimation {
+                    target: valueSource
+                    property: "rpm"
+                    easing.type: Easing.InOutSine
+                    to: 5.5
+                    duration: 6000
+                }
+            }
+
+            // Turn signal on
+            PropertyAction {
+                target: valueSource
+                property: "turnSignal"
+                value: randomDirection()
+            }
+
+            // Cruise for a while
+            ParallelAnimation {
+                NumberAnimation {
+                    target: valueSource
+                    property: "kph"
+                    easing.type: Easing.InOutSine
+                    to: 110
+                    duration: 10000
+                }
+                NumberAnimation {
+                    target: valueSource
+                    property: "rpm"
+                    easing.type: Easing.InOutSine
+                    to: 5.2
+                    duration: 10000
+                }
+            }
+
+            // Turn signal off
+            PropertyAction {
+                target: valueSource
+                property: "turnSignal"
+                value: -1
+            }
+
+            ParallelAnimation {
+                NumberAnimation {
+                    target: valueSource
+                    property: "kph"
+                    easing.type: Easing.InOutSine
+                    to: 115
+                    duration: 10000
+                }
+                NumberAnimation {
+                    target: valueSource
+                    property: "rpm"
+                    easing.type: Easing.InOutSine
+                    to: 5.5
+                    duration: 10000
+                }
+            }
+
+            // Start downshifting.
+
+            // Fifth to fourth gear.
+            ParallelAnimation {
+                NumberAnimation {
+                    target: valueSource
+                    property: "kph"
+                    easing.type: Easing.Linear
+                    to: 100
+                    duration: 5000
+                }
+
+                NumberAnimation {
+                    target: valueSource
+                    property: "rpm"
+                    easing.type: Easing.InOutSine
+                    to: 3.1
+                    duration: 5000
+                }
+            }
+
+            // Fourth to third gear.
+            NumberAnimation {
+                target: valueSource
+                property: "rpm"
+                easing.type: Easing.InOutSine
+                to: 5.5
+                duration: 600
+            }
+
+            ParallelAnimation {
+                NumberAnimation {
+                    target: valueSource
+                    property: "kph"
+                    easing.type: Easing.InOutSine
+                    to: 60
+                    duration: 5000
+                }
+                NumberAnimation {
+                    target: valueSource
+                    property: "rpm"
+                    easing.type: Easing.InOutSine
+                    to: 2.6
+                    duration: 5000
+                }
+            }
+
+            // Third to second gear.
+            NumberAnimation {
+                target: valueSource
+                property: "rpm"
+                easing.type: Easing.InOutSine
+                to: 6.3
+                duration: 600
+            }
+
+            ParallelAnimation {
+                NumberAnimation {
+                    target: valueSource
+                    property: "kph"
+                    easing.type: Easing.InOutSine
+                    to: 30
+                    duration: 5000
+                }
+                NumberAnimation {
+                    target: valueSource
+                    property: "rpm"
+                    easing.type: Easing.InOutSine
+                    to: 2.6
+                    duration: 5000
+                }
+            }
+
+            NumberAnimation {
+                target: valueSource
+                property: "rpm"
+                easing.type: Easing.InOutSine
+                to: 6.5
+                duration: 600
+            }
+
+            // Second to first gear.
+            ParallelAnimation {
+                NumberAnimation {
+                    target: valueSource
+                    property: "kph"
+                    easing.type: Easing.InOutSine
+                    to: 0
+                    duration: 5000
+                }
+                NumberAnimation {
+                    target: valueSource
+                    property: "rpm"
+                    easing.type: Easing.InOutSine
+                    to: 1
+                    duration: 4500
+                }
+            }
+
+            PauseAnimation {
+                duration: 5000
+            }
+        }
+    }
+*/
 }

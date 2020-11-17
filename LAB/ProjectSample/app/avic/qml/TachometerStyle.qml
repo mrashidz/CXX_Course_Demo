@@ -54,6 +54,10 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Extras 1.4
 
 DashboardGaugeStyle {
+    ValueSource {
+        id: valueSource
+        objectName: "valueSource"
+    }
     id: tachometerStyle
     tickmarkStepSize: 1
     labelStepSize: 1

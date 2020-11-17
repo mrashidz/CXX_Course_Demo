@@ -11,10 +11,11 @@ bool InputHandler::init(const std::string &_canIFname) {
     return this->CANBUS_Writer.open(_canIFname);
 }
 
+
 bool InputHandler::run() {
     bool ret = true;
     KeyboardReader::KeyBehaviour_t key = this->KeyboardReader.readKeyBehaviour();
-    if (key.second != X11::NADA) ret = this->encodKey(key);
+    if (key.second != X11::NADA) ret = ret &&this->encodKey(key);
     if (this->StateIsChanged) {
         this->printState();
         this->StateIsChanged = false;
@@ -31,6 +32,10 @@ bool InputHandler::run() {
     ret = ret&&this->CANBUS_Writer.write(CAN::MSG::GAUGES_ID,
                                          sizeof (CAN::MSG::GAUGES_ID),
                                          this->GAUGs.Data);
+    ret = ret&&this->CANBUS_Writer.write(CAN::MSG::USERIN_ID,
+                                         sizeof (CAN::MSG::_userin),
+                                         reinterpret_cast<uint8_t*>(&(this->USRIn)));
+
 
 
     return ret;
@@ -38,15 +43,16 @@ bool InputHandler::run() {
 
 bool InputHandler::encodKey(const KeyboardReader::KeyBehaviour_t &_k) {
     bool ret = true;
-    if(X11::DEFINED_KEYS.find(_k.second)==X11::DEFINED_KEYS.end())
-        std::cout << "Key " << _k.second << " is not defined!" << std::endl;
-    else if (_k.second == X11::EXIT) ret = false;
+    KeyboardReader::Key_t k = _k.second;
+    if(X11::DEFINED_KEYS.find(k)==X11::DEFINED_KEYS.end())
+        std::cout << "Key " << k << " is not defined!" << std::endl;
+    else if (k == X11::EXIT) ret = false;
     else if (_k.first == KeyRelease) ret = this->keyIsReleased(_k.second);
-    else if (_k.first == KeyPress)   ret = this->keyIsPressed(_k.second);
+    else                             ret = this->keyIsPressed(_k.second);
     return ret;
 }
 
-bool InputHandler::keyIsPressed(const unsigned int &_k) {
+bool InputHandler::keyIsPressed(const KeyboardReader::Key_t &_k) {
     bool ret = true;
     this->StateIsChanged = true;
     switch (_k) {
@@ -95,7 +101,7 @@ bool InputHandler::keyIsPressed(const unsigned int &_k) {
     return ret;
 }
 
-bool InputHandler::keyIsReleased(const unsigned int &_k) {
+bool InputHandler::keyIsReleased(const KeyboardReader::Key_t &_k) {
     this->StateIsChanged = true;
     bool ret = true;
     switch (_k) {
@@ -154,10 +160,10 @@ bool InputHandler::keyIsReleased(const unsigned int &_k) {
         break;
     case X11::BREK:
             this->State->InputState.ENGINE.BREK_P=0;
-        break;
-    case X11::IGNT:
-            this->State->InputState.ENGINE.IGNT=!this->State->InputState.ENGINE.IGNT;
         break;*/
+    case X11::IGNT:
+            this->USRIn.IGNT=!this->USRIn.IGNT;
+        break;
     default:
         //ret = false;
         std::cout << "Released Key is: " << X11::KeyToString(_k) << std::endl;

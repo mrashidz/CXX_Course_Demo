@@ -5,7 +5,7 @@
 #include "canio/can_common.h"
 
 
-
+unsigned char i = 0;
 void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
     switch (_frame->can_id) {
     case CAN::MSG::GAUGES_ID: {
@@ -18,6 +18,12 @@ void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
     }
     case CAN::MSG::ICONSS_ID:
         this->InstrumentCluster.setIcon(reinterpret_cast<const struct _icons * >((_frame->data)));
+        break;
+    case CAN::MSG::USERIN_ID: {
+        const struct CAN::MSG::_userin *d = reinterpret_cast<const struct CAN::MSG::_userin * >((_frame->data));
+        this->InstrumentCluster.startUp(d->IGNT);
+        this->InstrumentCluster.setRPM(++i);
+    }
         break;
     default:
         break;
@@ -71,5 +77,6 @@ void yourStuff::timerEvent(QTimerEvent*) {
 //    emit this->die();
     exit(-1);
     }
+
 }
 
