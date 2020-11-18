@@ -54,7 +54,7 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Extras 1.4
 
 DashboardGaugeStyle {
-    id: gaugeStyleDash
+    id: iconGaugeStyle
     minimumValueAngle: -120
     maximumValueAngle: 120
     tickmarkStepSize: 1
@@ -99,7 +99,7 @@ DashboardGaugeStyle {
 
                 if (minWarningColor != "transparent") {
                     ctx.beginPath();
-                    ctx.lineWidth = gaugeStyleDash.toPixels(0.08);
+                    ctx.lineWidth = iconGaugeStyle.toPixels(0.08);
                     ctx.strokeStyle = minWarningColor;
                     ctx.arc(outerRadius, outerRadius,
                         // Start the line in from the decorations, and account for the width of the line itself.
@@ -110,7 +110,7 @@ DashboardGaugeStyle {
                 }
                 if (maxWarningColor != "transparent") {
                     ctx.beginPath();
-                    ctx.lineWidth = gaugeStyleDash.toPixels(0.08);
+                    ctx.lineWidth = iconGaugeStyle.toPixels(0.08);
                     ctx.strokeStyle = maxWarningColor;
                     ctx.arc(outerRadius, outerRadius,
                         // Start the line in from the decorations, and account for the width of the line itself.

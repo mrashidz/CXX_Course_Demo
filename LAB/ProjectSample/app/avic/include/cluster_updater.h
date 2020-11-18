@@ -28,16 +28,27 @@ public:
     QObject *ValueSource;
 public:
     void setIcon(const _icons *_i);
-    inline void setGear(const char &_s) {ValueSource->setProperty("gear",QVariant(_s));}
+
+    /** RPM value 0 - 9000 **/
     inline void setRPM(const double &_s) {ValueSource->setProperty("rpmHezar",QVariant(_s));}
-    inline void setTXT(const QString &_s) {ValueSource->setProperty("txt",QVariant(_s));}
+    /** Speed betwwen 0 - 250 **/
     inline void setSpeed(const double &_s) {ValueSource->setProperty("kph",QVariant(_s));}
-    inline void setGearPindle(const char &_p) {ValueSource->setProperty("pindle",QVariant(_p));}
+    /** GearNumber **/
+    inline void setGear(const char &_s) {ValueSource->setProperty("gear",QVariant(_s));}
+    /** 0=P, 1=N, 2=R, 3=D, 4=M **/
+    inline void setGearPindle_int(const char &_p)  {ValueSource->setProperty("pindle_int",QVariant(_p));}
+    /** Set achar Directly to gear Pindle Position **/
+    inline void setGearPindle_char(const char &_p) {ValueSource->setProperty("prindle",QVariant(_p));}
+
+    /** Gauges receive a value between 0(MIN) and 255(MAX) **/
     inline void setFuelGauges(const double &_f) {ValueSource->setProperty("fuel",QVariant(_f/0xFF));}
     inline void setTemperatureGauges(const double &_t) {ValueSource->setProperty("temperature",QVariant(_t/0xFF));}
     inline void setOilTemperatureGauges(const double &_t) {ValueSource->setProperty("oil_temp",QVariant(_t/0xFF));}
-    inline void startUp(const int &_t) {ValueSource->setProperty("startUp",QVariant(_t));}
 
+    /** 0: off 1: on **/
+    inline void ignite(const int &_t) {ValueSource->setProperty("startUp",QVariant(_t));}
+    /** Set Text on the Screen **/
+    inline void setTXT(const QString &_s) {ValueSource->setProperty("txt",QVariant(_s));}
 
 private:
     unsigned short iconZ;

@@ -334,7 +334,7 @@ ApplicationWindow {
                 id: fuelGaugeStyle
 
                 icon: "./images/fuel-icon.png"
-                minWarningColor: valueSource.startUp ? "#f42d2d" : "gray"
+                minWarningColor:"#f42d2d"
 
 
 
@@ -358,8 +358,8 @@ ApplicationWindow {
 
                 icon: "./images/AGL_Icons_Oil.svg"
 
-                maxWarningColor: valueSource.startUp ? "#f42d2d" : "gray"
-                minWarningColor: valueSource.startUp ? "#2487e4" : "gray"
+                maxWarningColor: "#f42d2d"
+                minWarningColor: "#2487e4"
 
 
                tickmarkLabel: Text {
@@ -381,9 +381,8 @@ ApplicationWindow {
                 id: tempGaugeStyle
 
                 icon: "./images/temperature-icon.png"
-                maxWarningColor: /*valueSource.startUp /*? "#f42d2d" :*/ "gray"
-                minWarningColor: valueSource.startUp ? "#2487e4" : "gray"
-
+                maxWarningColor: "#f42d2d"
+                minWarningColor: "#2487e4"
                tickmarkLabel: Text {
                     color: "transparent"                 
                 }
@@ -406,15 +405,15 @@ ApplicationWindow {
         x: 740
         y: 664
         width: 441
-        height: 98
+        height: 130
         color: "black"
         Text {
             id: matn
             color: "white"
             text: valueSource.txt
             width: 441
-            height: 98
-            font.pixelSize: 12
+            height: 130
+            font.pixelSize: 15
 
         }
     }

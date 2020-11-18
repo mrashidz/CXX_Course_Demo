@@ -54,10 +54,7 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Extras 1.4
 
 DashboardGaugeStyle {
-    ValueSource {
-        id: valueSource
-        objectName: "valueSource"
-    }
+
     id: tachometerStyle
     tickmarkStepSize: 1
     labelStepSize: 1
@@ -89,7 +86,7 @@ DashboardGaugeStyle {
 
             ctx.beginPath();
             ctx.lineWidth = tachometerStyle.toPixels(0.08);
-            ctx.strokeStyle = valueSource.startUp ? "#f42d2d" : "gray";
+            ctx.strokeStyle = "#f42d2d";
 
             var warningCircumference = maximumValueAngle - minimumValueAngle * 0.1;
             var startAngle = maximumValueAngle -85;
@@ -106,7 +103,7 @@ DashboardGaugeStyle {
 
             ctx2.beginPath();
             ctx2.lineWidth = tachometerStyle.toPixels(0.08);
-            ctx2.strokeStyle = valueSource.startUp ? "#f42d2d" : "gray";
+            ctx2.strokeStyle = "#f42d2d";
 
 
 //            warningCircumference = maximumValueAngle - minimumValueAngle * 0.1;
@@ -120,7 +117,7 @@ DashboardGaugeStyle {
 
             ctx2.beginPath();
             ctx2.lineWidth = tachometerStyle.toPixels(0.08);
-            ctx2.strokeStyle =valueSource.startUp ? "#eed33e" : "gray";
+            ctx2.strokeStyle ="#eed33e";
 
             warningCircumference = maximumValueAngle - minimumValueAngle * 0.5;
             startAngle = maximumValueAngle -150;
