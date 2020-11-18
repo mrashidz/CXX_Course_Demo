@@ -21,7 +21,7 @@ bool InputHandler::run() {
         this->StateIsChanged = false;
     }
 
-    if(this->PushedKeys.size() && ++GaugeSensetivity > GAUGE_CHECK_SENSETIVITY)
+    if(this->PushedKeys.size() && ++GaugeSensetivity > GAUGPushedKeysE_CHECK_SENSETIVITY)
         for(auto &_e: this->PushedKeys)
             this->keyIsPushed(_e);
 
@@ -55,26 +55,21 @@ bool InputHandler::encodKey(const KeyboardReader::KeyBehaviour_t &_k) {
 bool InputHandler::keyIsPressed(const KeyboardReader::Key_t &_k) {
     bool ret = true;
     this->StateIsChanged = true;
-    switch (_k) {
-    /*case X11::ICN0:
+    switch (_k) {/*
+    case X11::ICN0:
             checkHazard();
         break;
     case X11::ICN1:
             checkHazard();
         break;
     case X11::GRCH:
-            checkHazard();
-        break;
+            checkHazard();*/
     case X11::ACCL:
-            this->State->InputState.ENGINE.ACCL_P=1;
+            this->USRIn.ACCL=0;
         break;
     case X11::BREK:
-            this->State->InputState.ENGINE.BREK_P=1;
+            this->USRIn.BREK_P=0;
         break;
-    case X11::EXIT:
-            ret = false;
-        break;
-    }*/
     case X11::OLDN:
         this->PushedKeys.insert(X11::OLDN);
         break;
@@ -154,15 +149,15 @@ bool InputHandler::keyIsReleased(const KeyboardReader::Key_t &_k) {
     case X11::FLUP:
         this->PushedKeys.erase(X11::FLUP);
         break;
-    /* Engine ACCL & BREK
+
     case X11::ACCL:
-            this->State->InputState.ENGINE.ACCL_P=0;
+        this->USRIn.ACCL=0;
         break;
     case X11::BREK:
-            this->State->InputState.ENGINE.BREK_P=0;
-        break;*/
+        this->USRIn.BREK_P=0;
+        break;
     case X11::IGNT:
-            this->USRIn.IGNT=!this->USRIn.IGNT;
+        this->USRIn.IGNT=!this->USRIn.IGNT;
         break;
     default:
         //ret = false;

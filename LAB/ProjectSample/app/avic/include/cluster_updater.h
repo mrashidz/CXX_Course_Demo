@@ -25,7 +25,6 @@ public:
     inline void init(QObject*_){this->ValueSource=_;}
 
 
-    QObject *ValueSource;
 public:
     void setIcon(const _icons *_i);
 
@@ -37,7 +36,7 @@ public:
     inline void setGear(const char &_s) {ValueSource->setProperty("gear",QVariant(_s));}
     /** 0=P, 1=N, 2=R, 3=D, 4=M **/
     inline void setGearPindle_int(const char &_p)  {ValueSource->setProperty("pindle_int",QVariant(_p));}
-    /** Set achar Directly to gear Pindle Position **/
+    /** Set a char directly to gear Pindle Position **/
     inline void setGearPindle_char(const char &_p) {ValueSource->setProperty("prindle",QVariant(_p));}
 
     /** Gauges receive a value between 0(MIN) and 255(MAX) **/
@@ -51,6 +50,7 @@ public:
     inline void setTXT(const QString &_s) {ValueSource->setProperty("txt",QVariant(_s));}
 
 private:
+    QObject *ValueSource;
     unsigned short iconZ;
 };
 
