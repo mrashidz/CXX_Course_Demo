@@ -16,10 +16,10 @@ public:
     CANio & operator=(const CANio &) = delete;
     bool open(const std::string &can_interface);
     bool write(const uint32_t &_id,
-               const uint8_t &_len,
+               const size_t &_len,
                const uint8_t * const _data);
     bool write(const struct canfd_frame * const frame);
-    READ_STATUS read(struct canfd_frame *frame);
+    READ_STATUS read(canfd_frame *frame);
     ~CANio();
 private:
     int fd = -1;

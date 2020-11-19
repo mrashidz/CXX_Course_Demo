@@ -17,11 +17,34 @@ void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
         break;
     }
     case CAN::MSG::ICONSS_ID:
-        this->InstrumentCluster.setIcon(reinterpret_cast<const struct _icons * >((_frame->data)));
+        struct _icons  p;// = reinterpret_cast<struct _icons * >((_frame->data));
+        static bool once = false;
+
+        if (!once) {
+            p.hazard = 1;
+            once = true;
+        } else
+            p.hazard = 0;
+        this->InstrumentCluster.setIcon(&p);
         break;
-    case CAN::MSG::USERIN_ID: {
-        const struct CAN::MSG::_userin *d = reinterpret_cast<const struct CAN::MSG::_userin * >((_frame->data));
-        this->InstrumentCluster.ignite(d->IGNT);
+//    case CAN::MSG::USERIN_ID: {
+//       // const struct CAN::MSG::_userin *d = reinterpret_cast<const struct CAN::MSG::_userin * >((_frame->data));
+//       // this->InstrumentCluster.ignite(d->IGNT);
+//    }
+//        break;
+
+    case CAN::MSG::GEARBX_ID: {
+        const struct CAN::MSG::Gearbx_t::_bits *d = reinterpret_cast<const struct CAN::MSG::Gearbx_t::_bits * >((_frame->data));
+        this->InstrumentCluster.setGearPindle_int(d->GEAR_P);
+        this->InstrumentCluster.setGear(d->GEAR_N);
+    }
+        break;
+    case CAN::MSG::ENGINE_ID: {
+        const struct CAN::MSG::_engine *d = reinterpret_cast<const struct CAN::MSG::_engine * >((_frame->data));
+        this->InstrumentCluster.ignite(d->RUN);
+        this->InstrumentCluster.setRPM(d->RPM);
+        this->InstrumentCluster.setSpeed(d->SPD);
+
     }
         break;
     default:
@@ -54,18 +77,18 @@ yourStuff::yourStuff(const std::string &_ifName, QObject *_vs) {
 
 bool yourStuff::run() {
     bool ret = true;
-    canfd_frame frame;    
-    CANOpener::ReadStatus status = this->CANReader.read(&frame);    
+    CANOpener::ReadStatus status = CANOpener::ReadStatus::OK;
 
-    if (status == CANOpener::ReadStatus::ERROR) ret = false;
 
-    else if (status == CANOpener::ReadStatus::NAVAL ||
-             status == CANOpener::ReadStatus::ENDOF) this->Counter++;
-
-    else if (status == CANOpener::ReadStatus::OK) {
-        this->Counter = 0;
+        canfd_frame frame;
+        this->CANReader.read(&frame);
+        /*while*/if (status == CANOpener::ReadStatus::OK) {
         this->YouHaveJustRecievedACANFrame(&frame);
     }
+    if (status == CANOpener::ReadStatus::ERROR) ret = false;
+    else if (status == CANOpener::ReadStatus::NAVAL ||
+             status == CANOpener::ReadStatus::ENDOF) this->Counter++;
+    else   this->Counter = 0;
     //if (this->Counter > 200) ret = false;
     return ret;
 }

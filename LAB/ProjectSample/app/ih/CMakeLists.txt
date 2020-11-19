@@ -1,3 +1,4 @@
+#bad practice!
 file(GLOB appih_src "src/*.cpp")
 add_executable(ih main.cpp ${appih_src})
 target_include_directories(ih PUBLIC  include

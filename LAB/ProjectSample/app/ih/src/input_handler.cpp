@@ -8,6 +8,7 @@
 bool InputHandler::init(const std::string &_canIFname) {
     std::memset(this->ICONs.Data,0x00,sizeof (CAN::MSG::Iconss_t::_bits));
     std::memset(this->GAUGs.Data,0x00,sizeof (CAN::MSG::Gauges_t::_inner));
+    std::memset(&(this->USRIn),0x00,sizeof (CAN::MSG::UserIn_t));
     return this->CANBUS_Writer.open(_canIFname);
 }
 
@@ -15,29 +16,34 @@ bool InputHandler::init(const std::string &_canIFname) {
 bool InputHandler::run() {
     bool ret = true;
     KeyboardReader::KeyBehaviour_t key = this->KeyboardReader.readKeyBehaviour();
-    if (key.second != X11::NADA) ret = ret &&this->encodKey(key);
+    if (key.second != X11::NADA)   ret = ret &&this->encodKey(key);
     if (this->StateIsChanged) {
         this->printState();
         this->StateIsChanged = false;
+    } else {
+        this->USRIn.IGNT = this->USRIn.GRDN =  this->USRIn.GRLF =
+                this->USRIn.GRRT = this->USRIn.GRUP = 0;
     }
 
-    if(this->PushedKeys.size() && ++GaugeSensetivity > GAUGPushedKeysE_CHECK_SENSETIVITY)
+    if(this->PushedKeys.size() && ++GaugeSensetivity > GAUGE_CHECK_SENSETIVITY)
         for(auto &_e: this->PushedKeys)
             this->keyIsPushed(_e);
 
-//    std::cout /*<< "Key " << <<" " */<< (int)(this->GaugeSensetivity)<< " is not defined!" << std::endl;
-    ret = ret&&this->CANBUS_Writer.write(CAN::MSG::ICONSS_ID,
+/*
+    if (this->USRIn.IGNT && !this->justSentIGNT) this->justSentIGNT = true;
+    else if (this->USRIn.IGNT && this->justSentIGNT) this->USRIn.IGNT = 0;
+    else if (!this->USRIn.IGNT && this->justSentIGNT) this->justSentIGNT = false;
+*/
+    /*ret = ret && this->CANBUS_Writer.write(CAN::MSG::ICONSS_ID,
                                          sizeof (CAN::MSG::Iconss_t),
                                          reinterpret_cast<uint8_t*>(&(this->ICONs)));
-    ret = ret&&this->CANBUS_Writer.write(CAN::MSG::GAUGES_ID,
+    ret = ret && this->CANBUS_Writer.write(CAN::MSG::GAUGES_ID,
                                          sizeof (CAN::MSG::GAUGES_ID),
-                                         this->GAUGs.Data);
-    ret = ret&&this->CANBUS_Writer.write(CAN::MSG::USERIN_ID,
-                                         sizeof (CAN::MSG::_userin),
-                                         reinterpret_cast<uint8_t*>(&(this->USRIn)));
-
-
-
+                                         this->GAUGs.Data);*/
+    ret = ret && this->CANBUS_Writer.write(CAN::MSG::USERIN_ID,
+                                           sizeof (CAN::MSG::_userin),
+                                           reinterpret_cast<uint8_t*>(&(this->USRIn)));
+    if (this->USRIn.IGNT ) std::cout << "WE DID IT DUDE WE DID@@" << std::endl;
     return ret;
 }
 
@@ -46,9 +52,11 @@ bool InputHandler::encodKey(const KeyboardReader::KeyBehaviour_t &_k) {
     KeyboardReader::Key_t k = _k.second;
     if(X11::DEFINED_KEYS.find(k)==X11::DEFINED_KEYS.end())
         std::cout << "Key " << k << " is not defined!" << std::endl;
-    else if (k == X11::EXIT) ret = false;
+
+    else if (k == X11::EXIT)         ret = false;
+    else if (_k.first == KeyPress)   ret = this->keyIsPressed(_k.second);
     else if (_k.first == KeyRelease) ret = this->keyIsReleased(_k.second);
-    else                             ret = this->keyIsPressed(_k.second);
+
     return ret;
 }
 
@@ -64,12 +72,6 @@ bool InputHandler::keyIsPressed(const KeyboardReader::Key_t &_k) {
         break;
     case X11::GRCH:
             checkHazard();*/
-    case X11::ACCL:
-            this->USRIn.ACCL=0;
-        break;
-    case X11::BREK:
-            this->USRIn.BREK_P=0;
-        break;
     case X11::OLDN:
         this->PushedKeys.insert(X11::OLDN);
         break;
@@ -88,11 +90,32 @@ bool InputHandler::keyIsPressed(const KeyboardReader::Key_t &_k) {
     case X11::FLUP:
         this->PushedKeys.insert(X11::FLUP);
         break;
+    case X11::IGNT:
+        this->USRIn.IGNT = 1;
+        break;
+    case X11::ACCL:
+        this->USRIn.ACCL = 1;
+        break;
+    case X11::BREK:
+        this->USRIn.BREK = 1;
+        break;
+    case X11::GRLF:
+        this->USRIn.GRLF = 1;
+        break;
+    case X11::GRUP:
+        this->USRIn.GRUP = 1;
+        break;
+    case X11::GRRT:
+        this->USRIn.GRRT = 1;
+        break;
+    case X11::GRDN:
+        this->USRIn.GRDN = 1;
+        break;
     default:
         //ret = false;
-        std::cout << "Pressed Key is: " << X11::KeyToString(_k) << std::endl;
         break;
     }
+    std::cout << "Pressed Key is: " << X11::KeyToString(_k) << std::endl;
     return ret;
 }
 
@@ -149,21 +172,34 @@ bool InputHandler::keyIsReleased(const KeyboardReader::Key_t &_k) {
     case X11::FLUP:
         this->PushedKeys.erase(X11::FLUP);
         break;
-
+    case X11::IGNT:
+        this->USRIn.IGNT = 0;
+        break;
     case X11::ACCL:
-        this->USRIn.ACCL=0;
+        this->USRIn.ACCL = 0;
         break;
     case X11::BREK:
-        this->USRIn.BREK_P=0;
+        this->USRIn.BREK = 0;
         break;
-    case X11::IGNT:
-        this->USRIn.IGNT=!this->USRIn.IGNT;
+    case X11::GRLF:
+        this->USRIn.GRLF = 0;
         break;
+    case X11::GRUP:
+        this->USRIn.GRUP = 0;
+        break;
+    case X11::GRRT:
+        this->USRIn.GRRT = 0;
+        break;
+    case X11::GRDN:
+        this->USRIn.GRDN = 0;
+        break;
+
     default:
         //ret = false;
         std::cout << "Released Key is: " << X11::KeyToString(_k) << std::endl;
         break;
     }
+
     return ret;
 }
 
@@ -199,7 +235,7 @@ void InputHandler::printState() {
     std::cout << "+++++ GAUGES:" << std::endl;
     CAN::MSG::printGauges(&(this->GAUGs.Inner));
     std::cout << "+++++ USERIN:" << std::endl;
-    CAN::MSG::printUserIn(this->USRIn);
+    CAN::MSG::printUserIn(&(this->USRIn));
     std::cout << "+++++ ICONSS:" << std::endl;
     //CAN::MSG::printIconss(&(this->ICONs.Bits));
     std::cout << std::endl;

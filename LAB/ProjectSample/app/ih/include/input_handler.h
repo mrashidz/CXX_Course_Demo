@@ -31,6 +31,7 @@ private:
     CANio CANBUS_Writer;
     x11KeyboardReader KeyboardReader;
     bool StateIsChanged = false;
+    bool justSentIGNT = false;
 
     uint8_t GaugeSensetivity = 0;
 };

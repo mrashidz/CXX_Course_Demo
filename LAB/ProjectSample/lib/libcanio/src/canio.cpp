@@ -54,24 +54,24 @@ bool CANio::open(const std::string &_ifname) {
     return true;
 }
 
-bool CANio::write(const uint32_t &_id, const uint8_t &_len, const uint8_t * const _data) {
+bool CANio::write(const uint32_t &_id, const size_t &_len, const uint8_t * const _data) {
     struct canfd_frame frame;
     std::memset(&frame, 0, sizeof(frame));
     frame.can_id = _id;
+    std::memcpy(frame.data, _data, _len);
     frame.len = _len;
-    std::memcpy(frame.data, _data, frame.len);
     return this->write(&frame);
 }
 
 bool CANio::write(const canfd_frame * const frame) {
-    bool ret = false;
+    bool ret = false;    
     if (::write(fd, frame, int(CAN_MTU)) != int(CAN_MTU))
         CAN_GENERIC::printErr("Write Error!");
     else ret = true;
     return ret;
 }
 
-READ_STATUS CANio::read(struct canfd_frame *frame) {
+READ_STATUS CANio::read(canfd_frame *frame) {
     READ_STATUS ret = READ_STATUS::ERROR;
     auto num_bytes = ::read(fd, frame, CAN_MTU);
     if (num_bytes == 0) ret = READ_STATUS::ENDOF;

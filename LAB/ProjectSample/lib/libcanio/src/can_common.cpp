@@ -36,16 +36,21 @@ void printEngine(const Engine_t &_e) {
     std::cout <<"SPD: " << static_cast<unsigned>(_e.SPD) << std::endl;
 }
 
-void printUserIn(const UserIn_t &_u) {
-    std::cout <<"ACCL: " << static_cast<unsigned>(_u.ACCL) << std::endl;
-    std::cout <<"BREK: " << static_cast<unsigned>(_u.BREK) << std::endl;
-    std::cout <<"GRDN: " << static_cast<unsigned>(_u.GRDN) << std::endl;
-    std::cout <<"GRUP: " << static_cast<unsigned>(_u.GRUP) << std::endl;
-    std::cout <<"GRLF: " << static_cast<unsigned>(_u.GRLF) << std::endl;
-    std::cout <<"GRRT: " << static_cast<unsigned>(_u.GRRT) << std::endl;
+void printUserIn(const UserIn_t *_u) {
+    std::cout <<"IGNT: " << static_cast<unsigned>(_u->IGNT) << std::endl;
+
+    std::cout <<"ACCL: " << static_cast<unsigned>(_u->ACCL) << std::endl;
+    std::cout <<"BREK: " << static_cast<unsigned>(_u->BREK) << std::endl;
+    std::cout <<"GRDN: " << static_cast<unsigned>(_u->GRDN) << std::endl;
+    std::cout <<"GRUP: " << static_cast<unsigned>(_u->GRUP) << std::endl;
+    std::cout <<"GRLF: " << static_cast<unsigned>(_u->GRLF) << std::endl;
+    std::cout <<"GRRT: " << static_cast<unsigned>(_u->GRRT) << std::endl;
     std::cout <<"RESERVERD_PADDING: " <<
-                static_cast<unsigned int>(_u.RESERVERD_PADDING) << std::endl;
+                static_cast<unsigned int>(_u->RESERVERD_PADDING) << std::endl;
 }
+
+
+
 
 } // namespace MSG
 } // namespace CAN

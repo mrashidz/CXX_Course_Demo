@@ -51,6 +51,7 @@ public:
 
 private:
     QObject *ValueSource;
+    void checkHazard(const _icons *_i);
     unsigned short iconZ;
 };
 
